@@ -1,36 +1,49 @@
 {% extends 'library/base.html' %}
 
 {% block content %}
-    <div class="flex justify-between items-center mb-6">
-        <h1 class="text-3xl font-extrabold text-gray-800">Каталог книг</h1>
-        <span class="bg-indigo-100 text-indigo-800 text-xs font-semibold px-2.5 py-0.5 rounded">Всего: {{ books.count }}</span>
+    <div class="flex justify-between items-center mb-8">
+        <h1 class="text-4xl font-black text-slate-800">Каталог книг</h1>
+        <span class="bg-indigo-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm">Всего: {{ books.count }}</span>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {% for book in books %}
-            <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 border border-gray-100">
-                <div class="p-6">
-                    <div class="uppercase tracking-wide text-sm text-indigo-500 font-semibold">{{ book.genre.name }}</div>
-                    <h2 class="block mt-1 text-xl font-bold text-gray-900">{{ book.title }}</h2>
-                    <p class="mt-2 text-gray-600">Авторы:
-                        <span class="font-medium text-gray-800">
-        {% for author in book.authors.all %}
-            {{ author.first_name }} {{ author.last_name }}{% if not forloop.last %}, {% endif %}
-        {% empty %}
-            Не указан
-        {% endfor %}
-    </span>
-                    </p>
-                    <div class="mt-4 flex items-center justify-between">
-                        <span class="text-sm text-gray-500 italic">ISBN: {{ book.isbn }}</span>
-                        <span class="px-3 py-1 rounded-full text-sm {% if book.is_available %}bg-green-100 text-green-800{% else %}bg-red-100 text-red-800{% endif %}">
-                    {% if book.is_available %}В наличии{% else %}Выдана{% endif %}
-                </span>
+            <div class="bg-white rounded-2xl shadow-sm hover:shadow-2xl transition-all duration-300 border border-slate-200 flex flex-col overflow-hidden">
+                <div class="p-6 flex-grow">
+                    <div class="uppercase tracking-widest text-xs text-indigo-600 font-black mb-1">
+                        {{ book.genre.name|default:"Без жанра" }}
                     </div>
+
+                    <h2 class="text-2xl font-bold text-slate-900 leading-tight mb-3">{{ book.title }}</h2>
+
+                    <div class="text-sm text-slate-600 mb-4">
+                        <span class="font-semibold text-slate-400 uppercase text-[10px] block mb-1">Авторы</span>
+                        <div class="flex flex-wrap gap-1">
+                            {% for author in book.authors.all %}
+                                <span class="text-slate-800">{{ author.first_name }} {{ author.last_name }}{% if not forloop.last %}, {% endif %}</span>
+                            {% empty %}
+                                <span class="text-slate-400 italic">Автор не указан</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 mt-auto flex items-center justify-between">
+                    <span class="text-xs text-slate-400 font-mono">ISBN: {{ book.isbn }}</span>
+
+                    {% with first_copy=book.bookcopy_set.first %}
+                        <span class="px-3 py-1 rounded-lg text-xs font-black uppercase tracking-wider
+                            {% if first_copy and first_copy.is_available %}bg-green-100 text-green-700 border border-green-200
+                            {% else %}bg-red-100 text-red-700 border border-red-200{% endif %}">
+                            {% if first_copy and first_copy.is_available %}В наличии{% else %}Выдана{% endif %}
+                        </span>
+                    {% endwith %}
                 </div>
             </div>
         {% empty %}
-            <p class="col-span-full text-center text-gray-500 py-10">В библиотеке пока нет книг.</p>
+            <div class="col-span-full text-center py-20 bg-white rounded-3xl border-2 border-dashed border-slate-200">
+                <p class="text-slate-400 font-medium text-lg">Библиотека пуста. Время добавить шедевры через админку!</p>
+            </div>
         {% endfor %}
     </div>
 {% endblock %}
