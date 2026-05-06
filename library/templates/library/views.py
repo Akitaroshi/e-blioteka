@@ -1,5 +1,7 @@
 from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from library.models import Book
+
 
 def book_list(request):
     books = Book.objects.all().prefetch_related('authors').select_related('genre')
