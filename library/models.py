@@ -42,7 +42,7 @@ class Book(models.Model):
     publisher = models.ForeignKey(Publisher, on_delete=models.SET_NULL, null=True, verbose_name='Издательство')
     genre = models.ForeignKey(Genre, on_delete=models.CASCADE, verbose_name='Жанр')
     authors = models.ManyToManyField(Author, verbose_name='Авторы') # Связь Автор-Книга
-
+    image_url = models.URLField(max_length=500, blank=True, null=True, verbose_name="Ссылка на обложку")
     def __str__(self):
         return self.title
 
