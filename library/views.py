@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404  # <--- ПРОВЕРЬ ТУТ
+from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator
 from .models import Book, Genre
 
@@ -29,3 +29,6 @@ def book_list(request):
 def book_detail(request, pk):
     book = get_object_or_404(Book, pk=pk)
     return render(request, 'library/book_detail.html', {'book': book})
+
+def index(request):
+    return render(request, 'library/index.html')

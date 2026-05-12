@@ -1,11 +1,45 @@
-<!DOCTYPE html>
-<html lang="en">
-    <nav class="bg-indigo-600 p-4 shadow-lg">
-        <div class="container mx-auto flex justify-between items-center">
-            <a href="/" class="text-white text-2xl font-bold italic tracking-tighter">e-blioteka</a>
-            <div class="space-x-4">
-                <a href="/admin/" class="text-indigo-100 hover:text-white transition-colors">Админка</a>
-            </div>
+<nav class="bg-indigo-600 text-white shadow-lg w-full">
+    <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+
+        <div class="flex items-center space-x-6">
+            <a href="{% url 'index' %}" class="text-2xl font-bold italic tracking-tighter">
+                e-blioteka
+            </a>
+
+            {% if request.path != '/' %}
+            <a href="javascript:history.back()" class="flex items-center text-sm bg-white/10 px-3 py-1.5 rounded-lg hover:bg-white/20 transition">
+                <span class="mr-1">←</span> Назад
+            </a>
+            {% endif %}
         </div>
-    </nav>
-</html>
+
+        <div class="flex items-center space-x-5">
+            {% if user.is_authenticated %}
+                <div class="flex items-center space-x-4">
+                    <a href="{% url 'profile' %}" class="text-sm font-medium hover:text-indigo-200 underline decoration-2 underline-offset-4">
+                        {{ user.username }}
+                    </a>
+                    <form action="{% url 'logout' %}" method="post" class="m-0">
+                        {% csrf_token %}
+                        <button type="submit" class="text-xs bg-red-500/80 hover:bg-red-500 px-2 py-1 rounded transition">Выйти</button>
+                    </form>
+                </div>
+            {% else %}
+                <div class="flex items-center space-x-6">
+                    <a href="{% url 'register' %}" class="bg-white text-indigo-600 px-4 py-2 rounded-lg font-bold text-sm hover:shadow-md transition shadow-indigo-800/20">
+                        Регистрация
+                    </a>
+                    <a href="{% url 'login' %}" class="text-sm font-semibold hover:text-indigo-200 transition">
+                        Войти
+                    </a>
+                </div>
+            {% endif %}
+
+            <div class="h-8 w-px bg-white/20 mx-2"></div>
+
+            <a href="/admin/" class="text-xs uppercase tracking-widest opacity-60 hover:opacity-100 transition">
+                Админка
+            </a>
+        </div>
+    </div>
+</nav>

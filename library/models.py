@@ -1,20 +1,6 @@
+from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-
-# Таблица 1: Пользователь
-class User(AbstractUser):
-    ROLE_CHOICES = (
-        ('admin', 'Администратор'),
-        ('librarian', 'Библиотекарь'),
-        ('reader', 'Читатель'),
-    )
-    email = models.EmailField(unique=True, verbose_name='Электронная почта')
-    phone_number = models.CharField(max_length=20, null=True, blank=True, verbose_name='Номер телефона')
-    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='reader', verbose_name='Роль')
-
-    class Meta:
-        verbose_name = "пользователь"
-        verbose_name_plural = "Пользователи"
 
 # Таблица 8: Издательство
 class Publisher(models.Model):
@@ -92,7 +78,7 @@ class Reservation(models.Model):
         ('active', 'Выполнена'),
     )
     book = models.ForeignKey(Book, on_delete=models.CASCADE, verbose_name='Книга')
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='Пользователь')
     reservation_date = models.DateField(auto_now_add=True, verbose_name='Дата резервации')
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='wait', verbose_name='Статус')
 
@@ -111,8 +97,8 @@ class Borrowing(models.Model):
         ('overdue', 'Просрочена'),
     )
     copy = models.ForeignKey(BookCopy, on_delete=models.CASCADE, verbose_name='Экземпляр')
-    reader = models.ForeignKey(User, related_name='borrowed_books', on_delete=models.CASCADE, verbose_name='Читатель')
-    librarian = models.ForeignKey(User, related_name='issued_books', on_delete=models.SET_NULL, null=True, verbose_name='Библиотекарь')
+    reader = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='borrowed_books', on_delete=models.CASCADE, verbose_name='Читатель')
+    librarian = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='issued_books', on_delete=models.SET_NULL, null=True, verbose_name='Библиотекарь')
     issue_date = models.DateField(auto_now_add=True, verbose_name='Дата выдачи')
     due_date = models.DateField(verbose_name='Плановая дата возврата')
     return_date = models.DateField(null=True, blank=True, verbose_name='Фактическая дата возврата')
