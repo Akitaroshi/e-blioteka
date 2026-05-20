@@ -1,10 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'library/base.html' %}
+{% block title %}Профиль{% endblock %}
 
-</body>
-</html>
+{% block content %}
+<div class="w-full max-w-lg mx-auto px-0 sm:px-2">
+    <div class="bg-white rounded-2xl shadow-lg border border-slate-100 overflow-hidden">
+        <div class="bg-gradient-to-r from-indigo-600 to-indigo-500 px-5 py-5 sm:px-8 sm:py-6 text-white">
+            <h1 class="text-xl sm:text-2xl font-bold">Личный кабинет</h1>
+            <p class="text-indigo-100 text-xs sm:text-sm mt-1">Данные вашего профиля</p>
+        </div>
+
+        <dl class="divide-y divide-slate-100 px-5 sm:px-8 py-1">
+            <div class="py-3 sm:py-4 flex flex-col gap-0.5 sm:grid sm:grid-cols-3 sm:gap-4">
+                <dt class="text-xs font-semibold uppercase tracking-wide text-slate-400">Логин</dt>
+                <dd class="text-slate-900 font-medium sm:col-span-2 break-words">{{ user.username }}</dd>
+            </div>
+            <div class="py-3 sm:py-4 flex flex-col gap-0.5 sm:grid sm:grid-cols-3 sm:gap-4">
+                <dt class="text-xs font-semibold uppercase tracking-wide text-slate-400">ФИО</dt>
+                <dd class="text-slate-900 sm:col-span-2 break-words">{{ user.full_name|default:"—" }}</dd>
+            </div>
+            <div class="py-3 sm:py-4 flex flex-col gap-0.5 sm:grid sm:grid-cols-3 sm:gap-4">
+                <dt class="text-xs font-semibold uppercase tracking-wide text-slate-400">Email</dt>
+                <dd class="text-slate-900 sm:col-span-2 break-all">{{ user.email|default:"—" }}</dd>
+            </div>
+            <div class="py-3 sm:py-4 flex flex-col gap-0.5 sm:grid sm:grid-cols-3 sm:gap-4">
+                <dt class="text-xs font-semibold uppercase tracking-wide text-slate-400">Телефон</dt>
+                <dd class="text-slate-900 sm:col-span-2">{{ user.phone|default:"—" }}</dd>
+            </div>
+        </dl>
+
+        <div class="px-5 sm:px-8 pb-6 sm:pb-8">
+            <a href="{% url 'book_list' %}" class="inline-flex items-center text-sm font-semibold text-indigo-600 hover:text-indigo-500 transition">
+                ← В каталог книг
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

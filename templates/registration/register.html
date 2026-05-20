@@ -1,41 +1,69 @@
 {% extends 'library/base.html' %}
+{% load static %}
+{% block title %}Регистрация{% endblock %}
 
 {% block content %}
-<div class="flex items-center justify-center min-h-[80vh] bg-gray-50 py-12 px-4">
-    <div class="max-w-md w-full bg-white p-8 rounded-2xl shadow-xl border border-gray-100">
-        <div class="text-center mb-8">
-            <h2 class="text-3xl font-extrabold text-gray-900">Создать аккаунт</h2>
-            <p class="mt-2 text-sm text-gray-600">Добро пожаловать в e-blioteka</p>
+<div class="flex items-center justify-center min-h-[70vh] sm:min-h-[80vh] py-8 sm:py-12 px-4">
+    <div class="max-w-md w-full bg-white p-5 sm:p-8 rounded-2xl shadow-xl border border-slate-100">
+        <div class="text-center mb-6 sm:mb-8">
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">Создать аккаунт</h2>
+            <p class="mt-2 text-sm text-slate-600">Добро пожаловать в e-blioteka</p>
         </div>
 
-        <form method="post" class="space-y-5">
+        <form method="post" class="space-y-5" novalidate>
             {% csrf_token %}
 
             {% for field in form %}
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-1">
-                        {{ field.label }}
-                    </label>
-                    {{ field }}
-                    {% if field.errors %}
-                        {% for error in field.errors %}
-                            <p class="text-red-500 text-xs mt-1 font-medium">{{ error }}</p>
-                        {% endfor %}
-                    {% endif %}
-                </div>
+                {% if field.name == 'password1' %}
+                    <div>
+                        <label for="{{ field.id_for_label }}" class="block text-sm font-semibold text-slate-700 mb-1">
+                            {{ field.label }}
+                        </label>
+                        {{ field }}
+                        <div id="password-rules" class="mt-3 rounded-xl bg-slate-50 border border-slate-100 px-4 py-3 text-xs text-slate-600 space-y-1.5">
+                            <p class="font-semibold text-slate-700 mb-2">Требования к паролю:</p>
+                            <p data-rule="length" class="flex items-center gap-2"><span data-rule-icon class="shrink-0">○</span> не менее 8 символов</p>
+                            <p data-rule="hasLetter" class="flex items-center gap-2"><span data-rule-icon class="shrink-0">○</span> содержит буквы (не только цифры)</p>
+                            <p data-rule="notSimilar" class="flex items-center gap-2"><span data-rule-icon class="shrink-0">○</span> не совпадает с логином</p>
+                            <p data-rule="notNumeric" class="flex items-center gap-2"><span data-rule-icon class="shrink-0">○</span> не состоит только из цифр</p>
+                            <p class="text-slate-400 pt-1 border-t border-slate-200 mt-2">Также не используйте слишком простые и распространённые пароли.</p>
+                        </div>
+                        {% if field.errors %}
+                            {% for error in field.errors %}
+                                <p class="text-red-600 text-xs mt-1 font-medium">{{ error }}</p>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                {% else %}
+                    <div>
+                        <label for="{{ field.id_for_label }}" class="block text-sm font-semibold text-slate-700 mb-1">
+                            {{ field.label }}
+                        </label>
+                        {{ field }}
+                        {% if field.errors %}
+                            {% for error in field.errors %}
+                                <p class="text-red-600 text-xs mt-1 font-medium">{{ error }}</p>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                {% endif %}
             {% endfor %}
 
-            <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-sm text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-200">
+            <button type="submit" class="w-full flex justify-center py-3 px-4 rounded-xl shadow-sm text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-200">
                 Зарегистрироваться
             </button>
         </form>
 
         <div class="mt-6 text-center">
-            <p class="text-sm text-gray-600">
+            <p class="text-sm text-slate-600">
                 Уже есть аккаунт?
                 <a href="{% url 'login' %}" class="font-bold text-indigo-600 hover:text-indigo-500 underline">Войти</a>
             </p>
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'library/js/form-utils.js' %}"></script>
 {% endblock %}

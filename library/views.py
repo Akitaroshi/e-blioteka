@@ -14,6 +14,9 @@ def book_list(request):
     if genre_id:
         books_queryset = books_queryset.filter(genre_id=genre_id)
 
+    total_books = Book.objects.count()
+    has_filters = bool(search_query or genre_id)
+
     paginator = Paginator(books_queryset, 6)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -23,12 +26,12 @@ def book_list(request):
         'genres': genres,
         'search_query': search_query,
         'selected_genre': genre_id,
+        'catalog_empty': total_books == 0,
+        'has_filters': has_filters,
+        'total_books': total_books,
     }
     return render(request, 'library/book_list.html', context)
 
 def book_detail(request, pk):
     book = get_object_or_404(Book, pk=pk)
     return render(request, 'library/book_detail.html', {'book': book})
-
-def index(request):
-    return render(request, 'library/index.html')
