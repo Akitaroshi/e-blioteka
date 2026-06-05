@@ -1,0 +1,8 @@
+from django.urls import path
+from library import views
+
+urlpatterns = [
+    path('', views.main_landing, name='main_landing'),
+    path('catalog/', views.book_list, name='book_list'),
+    path('book/<int:pk>/', views.book_detail, name='book_detail'),
+]

@@ -1,0 +1,10 @@
+__pycache__
+.idea/
+.venv/
+*.pyc
+*.pyo
+*.pyd
+*.pyw
+*.pyz
+*.pywz
+*.pyzw
